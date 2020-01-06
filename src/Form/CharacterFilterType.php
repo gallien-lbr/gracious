@@ -10,15 +10,19 @@ class CharacterFilterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // iterate through object CharacterFilterModel public attributes and populate list
-        foreach (array_keys(get_object_vars($options['data'])) as  $var) {
-
+        // iterate through attributes and populate list
+        foreach (['location','episode'] as  $var) {
             $filters[$var]['--All --'] = null;
 
             foreach ($options['data']->$var as $v) {
                 $filters[$var][$v['name']] = intval($v['id']);
             }
             ksort($filters[$var]);
+        }
+
+        $filters['dimension']['--All--'] = null;
+        foreach ( $options['data']->dimension as  $k => $v) {
+            $filters['dimension'][$k] = implode(',',$v);
         }
 
         $builder
@@ -38,7 +42,14 @@ class CharacterFilterType extends AbstractType
                 'label' => 'Filter by episode',
             ])
 
-             // ->add('dimension',ChoiceType::class,[])
+            ->add('dimension',ChoiceType::class,[
+                'choices' => $filters['dimension']
+            ])
+
+            ->add('filter_dimension', SubmitType::class, [
+                'attr' => ['class' => 'filter btn btn-primary'],
+                'label' => 'Filter by dimension',
+            ])
 
 
         ;

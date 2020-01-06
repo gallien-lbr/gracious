@@ -6,14 +6,20 @@ namespace App\Form\Model;
 
 class CharacterFilterModel
 {
-    //public $dimension;
     public $location;
     public $episode;
+    public $dimension = [];
 
-    public function __construct(array $location, array $episode)
+    public function __construct(array $filters)
     {
-        $this->location  = $location;
-        $this->episode = $episode;
+        $this->location  = $filters['location'];
+        $this->episode = $filters['episode'];
+
+        foreach ($this->location as  $v){
+             $this->dimension[$v['dimension']][] = $v['id'];
+        }
+        ksort($this->dimension);
     }
+
 
 }

@@ -26,7 +26,7 @@ class ApiRickAndMorty
         // no filter = fetch all
         $filter = '';
 
-        // no characters subset sent in parameters, returns none
+        // no characters subset is in parameters => returns empty array
         if(is_array($characters) && 0 ===  count($characters)){
             return [];
         }elseif(is_array($characters)){
@@ -42,10 +42,11 @@ class ApiRickAndMorty
         $allowed = ['getCharactersByLocation','getCharactersByEpisode'];
 
         if(in_array($name,$allowed)){
+
             $id = $arguments[0];
             $targetResource = mb_strtolower(explode('By',$name)[1]);
             $uri  = self::API_URI. $targetResource . '/'.$id;
-            //dd($uri);
+
             $res = $this->client->request('GET', $uri  , []);
             $arr =  json_decode($res->getBody(),true);
 
@@ -59,7 +60,7 @@ class ApiRickAndMorty
         }
     }
 
-    public function getFilters(array $list){
+    public function getFilters(array $list = ['location','episode']){
         $arr = [];
 
         foreach ($list as $item) {

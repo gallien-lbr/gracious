@@ -22,9 +22,9 @@ class MainController extends AbstractController
         $view = './characters.html.twig';
         $viewData = [];
 
-        $filters = $this->api->getFilters(['location','episode']);
+        $filters = $this->api->getFilters();
 
-        $characterFilter = new CharacterFilterModel($filters['location'],$filters['episode']);
+        $characterFilter = new CharacterFilterModel($filters);
 
         $form = $this->createForm(CharacterFilterType::class, $characterFilter);
         $form->handleRequest($request);
@@ -41,6 +41,7 @@ class MainController extends AbstractController
                    $getMethod = "getCharactersBy".ucwords($fieldName);
                    $characters = $this->api->$getMethod($id);
                    $results = $this->api->getCharacters($characters,null);
+
                    if(!isset($results['results'])){
                        $viewData['info']['count'] = count($results);
                        $viewData["results"] = $results;
