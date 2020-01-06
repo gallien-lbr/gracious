@@ -65,10 +65,6 @@ class ApiRickAndMorty
             }
             $characters = array_unique ($characters );
 
-            /*$characters = array_map(function($e){
-                return  basename($e);
-            },$arr[$key]);*/
-
             return $characters;
         }
     }

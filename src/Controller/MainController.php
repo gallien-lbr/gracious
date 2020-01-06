@@ -37,6 +37,7 @@ class MainController extends AbstractController
             }
 
             $id  = $data->$fieldName;
+
             if($id){
                    $getMethod = "getCharactersBy".ucwords($fieldName);
                    $characters = $this->api->$getMethod($id);
@@ -54,6 +55,7 @@ class MainController extends AbstractController
         }
 
         $viewData = $this->api->getCharacters(null,$page);
+
         return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
     }
 }

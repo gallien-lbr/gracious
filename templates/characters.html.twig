@@ -5,14 +5,34 @@
     {{ parent() }}
 {% endblock %}
 {% block body %}
-    {{ form(form) }}
-    <p>{{ data.info.count }}  character(s) found </p>
-    <br />
-    <div class="row " style="padding:2rem;">
+    <div class="container-fluid">
 
-    {%  for d in data['results'] %}
-        {%  include 'singleCharacter.html.twig' with {'d': d} %}
-    {% endfor %}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.location) }}
+            {{ form_row(form.filter_location) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.episode) }}
+            {{ form_row(form.filter_episode) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.dimension) }}
+            {{ form_row(form.filter_dimension) }}
+        </div>
+    </div>
 
+    {{ form_end(form) }}
 
+    {% if data|length > 0 %}
+        <p>{{ data.info.count }}  character(s) found </p>
+        <br />
+        <div class="row" style="">
+        {%  for d in data['results'] %}
+            {%  include 'singleCharacter.html.twig' with {'d': d} %}
+        {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

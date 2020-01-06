@@ -1,10 +1,10 @@
-<div class="col-sm-3">
-    <div class="card  bg-light "  style="width: 18rem;">
+<div class="col-md-4" style="margin-bottom:20px;">
+    <div class="card  bg-light "  style="width: 18rem;" >
         <div class="card-header">
             <strong> {{ d.name }}</strong> <br /> <small class="text-muted"> id:{{ d.id }}
                 | created at: {{ d.created|date("d-m-Y") }}</small>
         </div>
-        <img class="card-img-top" src="{# d.image #}" alt="Alt image">
+        <img class="card-img-top" src="{#  d.image #}" alt="Alt image">
         <div class="card-body">
             <h5 class="card-title">Species : {{ d.species }}</h5>
             <ul class="list-group">
