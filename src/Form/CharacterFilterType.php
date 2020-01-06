@@ -25,6 +25,8 @@ class CharacterFilterType extends AbstractType
             $filters['dimension'][$k] = implode(',',$v);
         }
 
+
+
         $builder
               ->add('location',  ChoiceType::class,
                         ['choices' => $filters['location']])

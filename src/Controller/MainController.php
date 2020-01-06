@@ -53,7 +53,7 @@ class MainController extends AbstractController
             return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
         }
 
-        $viewData = $this->api->getCharacters(null,null);
+        $viewData = $this->api->getCharacters(null,$page);
         return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
     }
 }

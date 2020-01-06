@@ -39,22 +39,35 @@ class ApiRickAndMorty
 
     public function __call($name, $arguments){
 
-        $allowed = ['getCharactersByLocation','getCharactersByEpisode'];
+        $allowed = ['getCharactersByLocation','getCharactersByEpisode','getCharactersByDimension'];
 
         if(in_array($name,$allowed)){
 
-            $id = $arguments[0];
             $targetResource = mb_strtolower(explode('By',$name)[1]);
-            $uri  = self::API_URI. $targetResource . '/'.$id;
+            $filterValue =  '['.$arguments[0].']';
+
+            if('dimension' === $targetResource) {
+                $targetResource = 'location';
+            }
+
+            $uri  = self::API_URI. $targetResource . '/'.$filterValue;
 
             $res = $this->client->request('GET', $uri  , []);
             $arr =  json_decode($res->getBody(),true);
 
-            $key = 'location'=== $targetResource ? 'residents' : 'characters';
+            $key = 'location' === $targetResource ? 'residents' : 'characters';
+            $characters = [];
+         
+            foreach ($arr as $item) {
+                foreach ($item[$key] as $resident) {
+                        $characters[] = intval(basename($resident));
+                }
+            }
+            $characters = array_unique ($characters );
 
-            $characters = array_map(function($e){
+            /*$characters = array_map(function($e){
                 return  basename($e);
-            },$arr[$key]);
+            },$arr[$key]);*/
 
             return $characters;
         }
