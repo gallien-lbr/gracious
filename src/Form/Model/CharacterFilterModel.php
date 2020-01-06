@@ -6,7 +6,14 @@ namespace App\Form\Model;
 
 class CharacterFilterModel
 {
-    public $dimensions;
-    public $locations;
-    public $episodes;
+    //public $dimension;
+    public $location;
+    public $episode;
+
+    public function __construct(array $location, array $episode)
+    {
+        $this->location  = $location;
+        $this->episode = $episode;
+    }
+
 }

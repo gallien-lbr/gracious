@@ -3,7 +3,14 @@
 namespace App\Services;
 use GuzzleHttp\Client;
 
-//echo $res->getStatusCode();//echo $res->getHeader('content-type')[0];
+//echo $res->getStatusCode();
+////echo $res->getHeader('content-type')[0];
+
+/**
+ * Utility class to call API
+ * Class ApiRickAndMorty
+ * @package App\Services
+ */
 class ApiRickAndMorty
 {
     const API_URI = 'https://rickandmortyapi.com/api/';
@@ -30,24 +37,38 @@ class ApiRickAndMorty
         return json_decode($res->getBody(),true);
     }
 
+    public function __call($name, $arguments){
 
-    public function getCharactersByLocationId($id=null):array{
-        $res = $this->client->request('GET', self::API_URI.'location/'.$id , []);
-        $arr =  json_decode($res->getBody(),true);
+        $allowed = ['getCharactersByLocation','getCharactersByEpisode'];
 
-        $characters = array_map(function($e){
-            return  basename($e);
-         },$arr['residents']);
+        if(in_array($name,$allowed)){
+            $id = $arguments[0];
+            $targetResource = mb_strtolower(explode('By',$name)[1]);
+            $uri  = self::API_URI. $targetResource . '/'.$id;
+            //dd($uri);
+            $res = $this->client->request('GET', $uri  , []);
+            $arr =  json_decode($res->getBody(),true);
 
-        return $characters;
+            $key = 'location'=== $targetResource ? 'residents' : 'characters';
+
+            $characters = array_map(function($e){
+                return  basename($e);
+            },$arr[$key]);
+
+            return $characters;
+        }
     }
 
-    public function getFilters(){
+    public function getFilters(array $list){
+        $arr = [];
 
-        $res = $this->client->request('GET', self::API_URI.'location/',[]);
-        $locations = json_decode($res->getBody(),true);
+        foreach ($list as $item) {
+            $res = $this->client->request('GET', self::API_URI."$item/",[]);
+            $data = json_decode($res->getBody(),true);
+            $arr[$item] = $data['results'];
+        }
 
-        return ['locations' => $locations['results']];
+        return $arr;
     }
 
 }

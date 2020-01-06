@@ -19,35 +19,40 @@ class MainController extends AbstractController
 
     public function index(Request $request, int $page=null)
     {
-        $filters = $this->api->getFilters();
-        $characterFilter = new CharacterFilterModel();
-        $characterFilter->locations = $filters['locations'];
+        $view = './characters.html.twig';
+        $viewData = [];
+
+        $filters = $this->api->getFilters(['location','episode']);
+
+        $characterFilter = new CharacterFilterModel($filters['location'],$filters['episode']);
 
         $form = $this->createForm(CharacterFilterType::class, $characterFilter);
         $form->handleRequest($request);
-        $locId = null;
 
         if ($form->isSubmitted() && $form->isValid()){
-           $data = $form->getData();
-           $locId = $data->locations;
+            $data = $form->getData();
 
-           if($locId){
-               $characters = $this->api->getCharactersByLocationId($locId);
-               $results = $this->api->getCharacters($characters,null);
+            if ($form->getClickedButton()) {
+               $fieldName = explode('_',$form->getClickedButton()->getName())[1];
+            }
 
+            $id  = $data->$fieldName;
+            if($id){
+                   $getMethod = "getCharactersBy".ucwords($fieldName);
+                   $characters = $this->api->$getMethod($id);
+                   $results = $this->api->getCharacters($characters,null);
                    if(!isset($results['results'])){
-                       $res['info']['count'] = count($results);
-                       $res["results"] = $results;
+                       $viewData['info']['count'] = count($results);
+                       $viewData["results"] = $results;
                    }else{
-                       $res = $results;
+                       $viewData = $results;
                    }
+             }
 
-               return $this->render('./characters.html.twig',["data" => $res,"form" => $form->createView()] );
-           }
+            return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
         }
 
-        $data = $this->api->getCharacters(null,null);
-        //dd($data);
-        return $this->render('./characters.html.twig',["data" => $data,"form" => $form->createView()] );
+        $viewData = $this->api->getCharacters(null,null);
+        return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
     }
 }

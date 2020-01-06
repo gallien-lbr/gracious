@@ -10,25 +10,37 @@ class CharacterFilterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // reducing the array to one dimension with key as ids
-        $locations['--All locations--'] = null;
+        // iterate through object CharacterFilterModel public attributes and populate list
+        foreach (array_keys(get_object_vars($options['data'])) as  $var) {
 
-        foreach ($options['data']->locations as $k => $v) {
-            $locations[$v['name']] = intval($v['id']);
+            $filters[$var]['--All --'] = null;
+
+            foreach ($options['data']->$var as $v) {
+                $filters[$var][$v['name']] = intval($v['id']);
+            }
+            ksort($filters[$var]);
         }
-        ksort($locations);
 
-        $builder->add('locations',  ChoiceType::class,
-            ['choices' => $locations,]
-        )
-              ->add('episodes', ChoiceType::class,
-                    ['choices' => []])
+        $builder
+              ->add('location',  ChoiceType::class,
+                        ['choices' => $filters['location']])
 
-             ->add('dimensions',ChoiceType::class,[])
-
-            ->add('Filter', SubmitType::class, [
+            ->add('filter_location', SubmitType::class, [
                 'attr' => ['class' => 'filter btn btn-primary'],
+                'label' => 'Filter by location',
             ])
+
+            ->add('episode', ChoiceType::class,
+                    ['choices' => $filters['episode']])
+
+            ->add('filter_episode', SubmitType::class, [
+                'attr' => ['class' => 'filter btn btn-primary'],
+                'label' => 'Filter by episode',
+            ])
+
+             // ->add('dimension',ChoiceType::class,[])
+
+
         ;
     }
 
