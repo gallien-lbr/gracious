@@ -3,7 +3,6 @@
 
 namespace App\Form\Model;
 
-
 class CharacterFilterModel
 {
     public $location;
@@ -15,11 +14,9 @@ class CharacterFilterModel
         $this->location  = $filters['location'];
         $this->episode = $filters['episode'];
 
-        foreach ($this->location as  $v){
+        foreach ($this->location as $v) {
              $this->dimension[$v['dimension']][] = $v['id'];
         }
         ksort($this->dimension);
     }
-
-
 }

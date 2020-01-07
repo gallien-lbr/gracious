@@ -1,12 +1,7 @@
 {% extends "base.html.twig" %}
-
-{% block title %}Index{% endblock %}
-{% block head %}
-    {{ parent() }}
-{% endblock %}
+{% block title %}Display characters{% endblock %}
 {% block body %}
     <div class="container-fluid">
-
     {{ form_start(form,{'action':'/'}) }}
         {{ form_errors(form) }}
         <div class="row">
@@ -45,10 +40,13 @@
         {% endif %}
 
         <br />
-        <div class="row" style="">
+        <div class="row">
         {%  for d in data['results'] %}
             {%  include 'singleCharacter.html.twig' with {'d': d} %}
         {% endfor %}
         </div>
+    {% else %}
+        <p>No character found</p>
     {% endif %}
+
 {% endblock %}

@@ -10,52 +10,32 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MainController extends AbstractController
 {
-    protected  $api;
-
-    public function __construct()
-    {
-        $this->api = new ApiRickAndMorty();
-    }
-
     public function index(Request $request, int $page)
     {
+        $api =  new ApiRickAndMorty();
         $view = './characters.html.twig';
-        $viewData = [];
 
-        $filters = $this->api->getFilters();
-
-        $characterFilter = new CharacterFilterModel($filters);
-
+        $characterFilter = new CharacterFilterModel($api->getFilters());
         $form = $this->createForm(CharacterFilterType::class, $characterFilter);
+        $viewParams = ["data" => null,"form" => $form->createView()];
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        // display a subset of characters using filter
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $fieldName = explode('_', $form->getClickedButton()->getName())[1];
+            $postValues  = $data->$fieldName;
 
-            if ($form->getClickedButton()) {
-               $fieldName = explode('_',$form->getClickedButton()->getName())[1];
-            }
-
-            $id  = $data->$fieldName;
-
-            if($id){
+            if ($postValues) {
                    $getMethod = "getCharactersBy".ucwords($fieldName);
-                   $characters = $this->api->$getMethod($id);
-                   $results = $this->api->getCharacters(null,$characters);
+                   $characters = $api->$getMethod($postValues);
+                   $viewParams['data'] = $api->getCharacters(null, $characters);
 
-                   if(!isset($results['results'])){
-                       $viewData['info']['count'] = count($results);
-                       $viewData["results"] = $results;
-                   }else{
-                       $viewData = $results;
-                   }
-                    return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
-             }
-
+                   return $this->render($view, $viewParams);
+            }
         }
-
-        $viewData = $this->api->getCharacters($page);
-
-        return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
+        // display all characters per page
+        $viewParams['data'] = $api->getCharacters($page);
+        return $this->render($view, $viewParams);
     }
 }
