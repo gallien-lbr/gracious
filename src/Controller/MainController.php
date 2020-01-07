@@ -17,7 +17,7 @@ class MainController extends AbstractController
         $this->api = new ApiRickAndMorty();
     }
 
-    public function index(Request $request, int $page=null)
+    public function index(Request $request, int $page)
     {
         $view = './characters.html.twig';
         $viewData = [];
@@ -41,7 +41,7 @@ class MainController extends AbstractController
             if($id){
                    $getMethod = "getCharactersBy".ucwords($fieldName);
                    $characters = $this->api->$getMethod($id);
-                   $results = $this->api->getCharacters($characters,null);
+                   $results = $this->api->getCharacters(null,$characters);
 
                    if(!isset($results['results'])){
                        $viewData['info']['count'] = count($results);
@@ -49,12 +49,12 @@ class MainController extends AbstractController
                    }else{
                        $viewData = $results;
                    }
+                    return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
              }
 
-            return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
         }
 
-        $viewData = $this->api->getCharacters(null,$page);
+        $viewData = $this->api->getCharacters($page);
 
         return $this->render($view,["data" => $viewData,"form" => $form->createView()] );
     }

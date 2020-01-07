@@ -7,7 +7,7 @@
 {% block body %}
     <div class="container-fluid">
 
-    {{ form_start(form) }}
+    {{ form_start(form,{'action':'/'}) }}
         {{ form_errors(form) }}
         <div class="row">
         <div class="col-md-4">
@@ -28,6 +28,22 @@
 
     {% if data|length > 0 %}
         <p>{{ data.info.count }}  character(s) found </p>
+
+        {% if data.info.next is defined and data.info.next != '' %}
+            {% set next = data.info.next|split('=') %}
+            {% if next[0] is not empty %}
+                <a href="/{{ next[1] }}">>> View next page</a>
+            {% endif %}
+        {% endif %}
+        <br />
+
+        {% if data.info.prev is defined and data.info.prev != '' %}
+            {% set prev = data.info.prev|split('=') %}
+            {% if next[0] is not empty %}
+                <a href="/{{ prev[1] }}"><< View prev page</a>
+            {% endif %}
+        {% endif %}
+
         <br />
         <div class="row" style="">
         {%  for d in data['results'] %}

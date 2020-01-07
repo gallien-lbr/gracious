@@ -21,7 +21,7 @@ class ApiRickAndMorty
         $this->client = new Client();
     }
 
-    public function getCharacters(array $characters = null,int $page=null){
+    public function getCharacters(?int $page, array $characters = null){
 
         // no filter = fetch all
         $filter = '';
@@ -33,7 +33,9 @@ class ApiRickAndMorty
             $filter =  '['.implode(',',$characters) . ']';
         }
 
-        $res = $this->client->request('GET', self::API_URI.'character/'.$filter, []);
+        $query = $page ? ['query' => ['page' => $page]] : [] ;
+
+        $res = $this->client->request('GET', self::API_URI.'character/'.$filter, $query);
         return json_decode($res->getBody(),true);
     }
 
