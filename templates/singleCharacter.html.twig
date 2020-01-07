@@ -7,7 +7,7 @@
 
             </small>
         </div>
-        <img class="card-img-top" src="{#   d.image #}" alt="Alt image">
+        <img class="card-img-top" src="{{  d.image   }}" alt="Alt image">
         <div class="card-body">
             <ul class="list-group">
                 <li class="list-group-item">Species : {{ d.species }}</li>
@@ -15,6 +15,7 @@
                 <li class="list-group-item">Status: {{ d.status }}</li>
                 <li class="list-group-item">Gender: {{ d.gender }}</li>
                 <li class="list-group-item">Last location: {{ d.location.name }}</li>
+                <li class="list-group-item">Appeared in {{ d.episode|length }} episode(s)</li>
             </ul>
         </div>
     </div>

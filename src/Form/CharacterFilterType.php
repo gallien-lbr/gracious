@@ -35,7 +35,7 @@ class CharacterFilterType extends AbstractType
               )
 
             ->add('filter_location', SubmitType::class, [
-                'attr' => ['class' => 'filter btn btn-primary'],
+                'attr' => ['class' => 'filter btn btn-secondary'],
                 'label' => 'Filter by location',
             ])
 
@@ -46,7 +46,7 @@ class CharacterFilterType extends AbstractType
             )
 
             ->add('filter_episode', SubmitType::class, [
-                'attr' => ['class' => 'filter btn btn-primary'],
+                'attr' => ['class' => 'filter btn btn-secondary'],
                 'label' => 'Filter by episode',
             ])
 
@@ -55,10 +55,9 @@ class CharacterFilterType extends AbstractType
             ])
 
             ->add('filter_dimension', SubmitType::class, [
-                'attr' => ['class' => 'filter btn btn-primary'],
+                'attr' => ['class' => 'filter btn btn-secondary'],
                 'label' => 'Filter by dimension',
             ])
-
 
         ;
     }

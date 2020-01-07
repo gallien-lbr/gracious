@@ -23,19 +23,21 @@ class MainController extends AbstractController
         // display a subset of characters using filter
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $fieldName = explode('_', $form->getClickedButton()->getName())[1];
-            $postValues  = $data->$fieldName;
+            $filtername = explode('_', $form->getClickedButton()->getName())[1];
+            $postValues  = $data->$filtername;
 
             if ($postValues) {
-                   $getMethod = "getCharactersBy".ucwords($fieldName);
+                   $getMethod = "getCharactersBy".ucwords($filtername);
                    $characters = $api->$getMethod($postValues);
-                   $viewParams['data'] = $api->getCharacters(null, $characters);
+
+                   $viewParams['data']['res'] = $api->getCharacters(null, $characters);
+                   $viewParams['data']['filtername'] = $filtername;
 
                    return $this->render($view, $viewParams);
             }
         }
         // display all characters per page
-        $viewParams['data'] = $api->getCharacters($page);
+        $viewParams['data']['res'] = $api->getCharacters($page);
         return $this->render($view, $viewParams);
     }
 }
