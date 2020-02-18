@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+{% block title %}Add Contract{% endblock %}
+
+{% block body %}
+<h1>Test Gl</h1>
+<p>
+    test formulaire
+</p>
+
+    {{ form_start(form) }}
+        {{ form_row(form.date) }}
+        {{ form_row(form.contractType) }}
+        {{ form_row(form.submit, { 'label': 'Submit me' }) }}
+    {{ form_end(form) }}
+
+{% endblock %}

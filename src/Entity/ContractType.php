@@ -24,12 +24,12 @@ class ContractType
     private $name;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $isCreated;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ContractField",inversedBy="contractType")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ContractField",inversedBy="contractType",cascade={"persist"})
      */
     private $fields;
 
@@ -42,24 +42,6 @@ class ContractType
     public function getFields()
     {
         return $this->fields;
-    }
-
-
-
-    /**
-     * @return mixed
-     */
-    public function getIsCreated()
-    {
-        return $this->isCreated;
-    }
-
-    /**
-     * @param mixed $isCreated
-     */
-    public function setIsCreated($isCreated): void
-    {
-        $this->isCreated = $isCreated;
     }
 
 
@@ -98,6 +80,21 @@ class ContractType
         return $this;
     }
 
+    public function getIsCreated(): ?bool
+    {
+        return $this->isCreated;
+    }
+
+    public function setIsCreated(?bool $isCreated): self
+    {
+        $this->isCreated = $isCreated;
+
+        return $this;
+    }
+
+    public function __toString(){
+        return $this->getName();
+    }
 
 
 }

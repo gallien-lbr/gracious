@@ -23,6 +23,13 @@ class AContract
      */
     private $date;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ContractType")
+     */
+    private $contractType;
+
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SelectField",mappedBy="contract")
      */
@@ -78,6 +85,17 @@ class AContract
             }
         }
 
+        return $this;
+    }
+
+    public function getContractType(): ?ContractType
+    {
+        return $this->contractType;
+    }
+
+    public function setContractType(?ContractType $contractType): self
+    {
+        $this->contractType = $contractType;
         return $this;
     }
 }
